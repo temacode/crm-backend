@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
+import {User} from "../interfaces";
 
-export const generateAccessToken = (login: string): string => {
+export const generateAccessToken = (user: User): string => {
 	try {
-		return jwt.sign({login}, process.env.TOKEN_SECRET, {expiresIn: "10s"});
+		return jwt.sign(user, process.env.TOKEN_SECRET, {expiresIn: "3600s"});
 	} catch (e) {
 		console.log(e);
 
@@ -10,9 +11,9 @@ export const generateAccessToken = (login: string): string => {
 	}
 };
 
-export const generateRefreshToken = (login: string): string => {
+export const generateRefreshToken = (user: User): string => {
 	try {
-		return jwt.sign({login}, process.env.TOKEN_SECRET, {
+		return jwt.sign(user, process.env.TOKEN_SECRET, {
 			expiresIn: "604800s",
 		});
 	} catch (e) {

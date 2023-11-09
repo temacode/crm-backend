@@ -1,7 +1,7 @@
 import express, {Express} from "express";
 import dotenv from "dotenv";
 import {Client} from "pg";
-import {authRoute} from "./routes";
+import {authRoute, serviceRoute, todoRoute} from "./routes";
 import cookieParser from "cookie-parser";
 const postgres = new Client({
 	user: "artem",
@@ -23,6 +23,8 @@ postgres.connect().then(
 		console.log("\nПодключение к PostgreSQL успешно установлено");
 
 		authRoute(app, postgres);
+		todoRoute(app, postgres);
+		serviceRoute(app, postgres);
 
 		app.listen(port, () => {
 			console.log(`\nСервер успешно запущен по адресу http://localhost:${port}\n`);

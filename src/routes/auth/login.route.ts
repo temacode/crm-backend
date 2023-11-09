@@ -50,13 +50,13 @@ export const loginRoute = (app: Express, postgres: Client, domain: string) => {
 						id: privateUser.id,
 						name: privateUser.name,
 						surname: privateUser.surname,
-						login: privateUser.login,
+						nickname: privateUser.nickname,
 						email: privateUser.email,
 					};
 				}
 
-				const accessToken = generateAccessToken(user.email);
-				const refreshToken = generateRefreshToken(user.login);
+				const accessToken = generateAccessToken(user);
+				const refreshToken = generateRefreshToken(user);
 
 				const loginResponse: LoginResponse = {
 					...user,
@@ -67,7 +67,7 @@ export const loginRoute = (app: Express, postgres: Client, domain: string) => {
 					maxAge: 31536000,
 				})
 					.status(200)
-					.send(loginResponse);
+					.json(loginResponse);
 			})
 			.catch(err => {
 				if (err) {

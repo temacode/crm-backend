@@ -23,29 +23,13 @@ export const authenticateRefreshToken: RequestHandler<{
 		res.locals.tokenData = tokenData as TokenData;
 
 		next();
-
-		// Нужно проверить, нужно ли дополнительно проверять, существует ли пользователь из рефреш токена
-		/* User.findOne({login: (tokenData as TokenData).login}).exec((err, user) => {
-			if (err) {
-				return res.status(500).send("Ошибка поиска пользователя");
-			}
-
-			if (!user) {
-				return res.status(401).send("Пользователь не найден");
-			} else {
-				req.params.allowedToGenerate = true;
-				req.params.tokenData = tokenData as TokenData;
-
-				next();
-			}
-		}); */
 	});
 };
 
 export const refreshTokenRoute = (app: Express, postgres: Client, domain: string) => {
 	app.get(`${domain}/refresh-token`, authenticateRefreshToken, (req, res) => {
-		const accessToken = generateAccessToken(res.locals.tokenData.login);
-		const refreshToken = generateRefreshToken(res.locals.tokenData.login);
+		const accessToken = generateAccessToken(res.locals.tokenData.nickname);
+		const refreshToken = generateRefreshToken(res.locals.tokenData.nickname);
 
 		res.cookie("refreshToken", refreshToken, {
 			httpOnly: true,

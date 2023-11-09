@@ -1,6 +1,7 @@
 export enum RegisterCredentialFields {
-	LOGIN = "login",
+	NICKNAME = "nickname",
 	PASSWORD = "password",
 	NAME = "name",
 	SURNAME = "surname",
+	EMAIL = "email",
 }

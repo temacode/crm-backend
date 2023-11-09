@@ -16,7 +16,7 @@ export const registerRoute = (app: Express, postgres: Client, domain: string) =>
 		});
 
 		if (dataLoss) {
-			return res.status(400).send("Не хватает данных");
+			return res.status(400).send({error: "Не хватает данных"});
 		}
 
 		const passwordHash = encryptPasssword(registerCredentials.password);
@@ -26,16 +26,18 @@ export const registerRoute = (app: Express, postgres: Client, domain: string) =>
                 INSERT INTO 
                     auth.users(
                         name, 
-                        surname, 
-                        login, 
+                        surname,
+						email,
+                        nickname, 
                         password
                     ) 
-                VALUES ($1, $2, $3, $4) 
+                VALUES ($1, $2, $3, $4, $5) 
                 RETURNING *`,
 			values: [
 				registerCredentials.name,
 				registerCredentials.surname,
-				registerCredentials.login,
+				registerCredentials.email,
+				registerCredentials.nickname,
 				passwordHash,
 			],
 		};
@@ -49,7 +51,7 @@ export const registerRoute = (app: Express, postgres: Client, domain: string) =>
 					case "23505": {
 						res.status(400);
 						res.json({
-							error: "Пользователь с таким ником уже существует",
+							error: "Пользователь с таким ником или почтой уже существует",
 						});
 						break;
 					}
