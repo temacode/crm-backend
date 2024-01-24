@@ -10,7 +10,7 @@ export const getColumnsRoute = (app: Express, postgres: Client, domain: string) 
 		`
 		)
 			.then(result => {
-				res.status(200).json({test: "test"});
+				res.status(200).json(result.rows);
 			})
 			.catch(err => {
 				res.status(500).json({error: "Что-то пошло не так"});
