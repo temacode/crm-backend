@@ -1,6 +1,7 @@
 import {Express} from "express";
 import {Client} from "pg";
 import {authenticateToken} from "../../common";
+import {resetAutoincrement} from "../../postgres";
 
 export const deleteColumnRoute = (app: Express, postgres: Client, domain: string) => {
 	app.delete(`${domain}/delete-column`, authenticateToken, (req, res) => {
@@ -17,6 +18,7 @@ export const deleteColumnRoute = (app: Express, postgres: Client, domain: string
 		`,
 				[columnId]
 			)
+			.then(result => resetAutoincrement(postgres, "todo", "columns", "columns_id_seq", result))
 			.then(result => {
 				res.status(200).json(result.rows);
 			})

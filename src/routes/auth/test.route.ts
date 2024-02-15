@@ -4,10 +4,16 @@ import {authenticateToken} from "../../common";
 
 export const testRoute = (app: Express, postgres: Client, domain: string) => {
 	app.get(`/api/v1/test`, authenticateToken, (req, res) => {
-		if (!res.locals.user) {
-			return res.status(401).send({error: "Ошибка аутентификации"});
-		}
+		const query = {
+			text: `
+                ALTER TABLE 
+                    todo.columns RENAME COLUMN position2 TO position`,
+		};
 
-		return res.status(200).send(new Date());
+		postgres.query(query.text)
+			.catch(e => console.log(e))
+			.then(() => {
+				res.status(200).send();
+			});
 	});
 };

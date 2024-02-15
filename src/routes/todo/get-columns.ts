@@ -10,13 +10,10 @@ export const getColumnsRoute = (app: Express, postgres: Client, domain: string) 
 		`
 		)
 			.then(result => {
-				res.status(200).json(result.rows);
+				res.status(200).send(result.rows);
 			})
 			.catch(err => {
-				res.status(500).json({error: "Что-то пошло не так"});
-			})
-			.finally(() => {
-				res.send();
+				res.status(500).send({error: "Что-то пошло не так"});
 			});
 	});
 };

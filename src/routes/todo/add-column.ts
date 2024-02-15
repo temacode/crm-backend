@@ -1,7 +1,7 @@
 import {Express, Request} from "express";
 import {Client} from "pg";
 import {authenticateToken} from "../../common";
-import {PostgresError} from "../../postgres";
+import {PostgresError, resetAutoincrement} from "../../postgres";
 
 interface AddColumnRequest {
 	title: string;
@@ -54,6 +54,8 @@ export const addColumnRoute = (app: Express, postgres: Client, domain: string) =
 				}
 
 				res.status(500).json({error: "Что-то пошло не так"});
+
+				return resetAutoincrement(postgres, "todo", "columns", "columns_id_seq");
 			})
 			.finally(() => {
 				return res.send();
